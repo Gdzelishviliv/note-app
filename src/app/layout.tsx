@@ -16,7 +16,7 @@ const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
           </header>
           <main>{children}</main>
           <footer className="bg-gray-800 text-white p-4 text-center">
-            <p>&copy; {new Date().getFullYear()} My Notes App</p>
+            <p>{new Date().getFullYear()} My Notes App</p>
           </footer>
         </div>
       </body>

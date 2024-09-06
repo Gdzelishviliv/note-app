@@ -1,5 +1,5 @@
-"use client"
-import { useState } from "react";
+"use client";
+import React, { useState } from "react";
 
 interface Task {
   id: string;
@@ -25,6 +25,12 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
     }
   };
 
+  const handleKeyDown=(event:React.KeyboardEvent<HTMLInputElement>)=>{
+    if (event.key==="Enter"){
+        addTask();
+    }
+  }
+
   const toggleTaskCompletion = (taskId: string) => {
     setTasks(
       tasks.map((task) =>
@@ -48,7 +54,9 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
   };
 
   return (
-    <div className={`relative p-4 m-4 border rounded-lg shadow-lg ${color}`}>
+    <div
+      className={`relative flex flex-col-reverse p-4 m-4 border rounded-lg shadow-lg ${color}`}
+    >
       <div className="absolute top-0 right-0 p-2">
         <button
           onClick={downloadNote}
@@ -59,7 +67,7 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
       </div>
       <div className="space-y-2">
         {tasks.map((task) => (
-          <div key={task.id} className="flex items-center space-x-2">
+          <div key={task.id} className="flex items-center justify-between gap-8">
             <input
               type="checkbox"
               checked={task.completed}
@@ -71,25 +79,29 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
             </span>
             <button
               onClick={() => deleteTask(task.id)}
-              className="ml-2 text-red-500"
+              className="text-red-500"
             >
               ❌
             </button>
           </div>
         ))}
       </div>
-      <input
-        type="text"
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        className="mt-2 w-full p-2 border rounded"
-      />
-      <button
-        onClick={addTask}
-        className="mt-2 bg-green-500 text-white p-2 rounded"
-      >
-        Add Task
-      </button>
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          value={inputText}
+          onKeyDown={handleKeyDown}
+          placeholder="type note"
+          onChange={(e) => setInputText(e.target.value)}
+          className="mt-2 w-full p-2 border rounded w-12 h-10"
+        />
+        <button
+          onClick={addTask}
+          className="mt-2 bg-green-500 text-white p-2 rounded h-10 w-24"
+        >
+          Add
+        </button>
+      </div>
     </div>
   );
 };
