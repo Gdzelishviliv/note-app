@@ -1,12 +1,6 @@
-import './globals.css';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react'
 
-export const metadata = {
-  title: 'Notes',
-  description: 'Note aplication',
-};
-
-const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const MainLayout = (children:ReactNode) => {
   return (
     <html lang="en">
       <body>
@@ -21,7 +15,5 @@ const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
         </div>
       </body>
     </html>
-  );
-};
-
-export default RootLayout;
+  )
+}

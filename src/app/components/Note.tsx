@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Task {
   id: string;
@@ -15,6 +15,27 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputText, setInputText] = useState("");
 
+  useEffect(() => {
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      try {
+        const parsedTasks: Task[] = JSON.parse(storedTasks);
+        setTasks(parsedTasks);
+      } catch (error) {
+        console.error('err', error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    } catch (error) {
+      console.error('err', error);
+    }
+  }, [tasks]);
+
+
   const addTask = () => {
     if (inputText.trim()) {
       setTasks([
@@ -25,11 +46,11 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
     }
   };
 
-  const handleKeyDown=(event:React.KeyboardEvent<HTMLInputElement>)=>{
-    if (event.key==="Enter"){
-        addTask();
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      addTask();
     }
-  }
+  };
 
   const toggleTaskCompletion = (taskId: string) => {
     setTasks(
@@ -67,7 +88,10 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
       </div>
       <div className="space-y-2">
         {tasks.map((task) => (
-          <div key={task.id} className="flex items-center justify-between gap-8">
+          <div
+            key={task.id}
+            className="flex items-center justify-between gap-8"
+          >
             <input
               type="checkbox"
               checked={task.completed}
@@ -93,7 +117,7 @@ const Note: React.FC<{ color: string }> = ({ color }) => {
           onKeyDown={handleKeyDown}
           placeholder="type note"
           onChange={(e) => setInputText(e.target.value)}
-          className="mt-2 w-full p-2 border rounded w-12 h-10"
+          className="mt-2 w-full p-2 border rounded h-10"
         />
         <button
           onClick={addTask}
