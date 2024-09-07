@@ -1,6 +1,10 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from 'react';
 
-export const MainLayout = (children:ReactNode) => {
+interface MainLayoutProps {
+  children: ReactNode;
+}
+
+export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
@@ -15,5 +19,5 @@ export const MainLayout = (children:ReactNode) => {
         </div>
       </body>
     </html>
-  )
-}
+  );
+};

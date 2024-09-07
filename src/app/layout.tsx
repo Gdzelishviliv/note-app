@@ -1,26 +1,17 @@
 import './globals.css';
 import { ReactNode } from 'react';
+import { MainLayout } from './layouts/MainLayout';
 
 export const metadata = {
   title: 'Notes',
-  description: 'Note aplication',
+  description: 'Note application',
 };
 
 const RootLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <html lang="en">
-      <body>
-        <div className="min-h-screen bg-gray-100">
-          <header className="bg-gray-800 text-white p-4">
-            <h1 className="text-2xl">My Notes App</h1>
-          </header>
-          <main>{children}</main>
-          <footer className="bg-gray-800 text-white p-4 text-center">
-            <p>{new Date().getFullYear()} My Notes App</p>
-          </footer>
-        </div>
-      </body>
-    </html>
+    <MainLayout>
+      {children}
+    </MainLayout>
   );
 };
 
