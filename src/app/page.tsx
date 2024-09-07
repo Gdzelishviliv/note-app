@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 
 const Note = dynamic(() => import("./components/Note"), { ssr: false });
 
@@ -21,7 +21,6 @@ interface Note {
 const Home: React.FC = () => {
   const [notes, setNotes] = useState<Note[]>([]);
   const [showColorSelector, setShowColorSelector] = useState(false);
-  const [savedNotes, setSavedNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     const storedNotes = localStorage.getItem("notes");
@@ -40,8 +39,9 @@ const Home: React.FC = () => {
     setShowColorSelector(false);
   };
 
-  const removeNote = (id: string) => {
+  const handleRemoveNote = (id: string) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+    localStorage.removeItem(id); // Clean up localStorage if needed
   };
 
   const onDragEnd = (result: any) => {
@@ -67,7 +67,13 @@ const Home: React.FC = () => {
               className="relative"
             >
               {notes.map((note, index) => (
-                <Note key={note.id} color={note.color} noteId={note.id} index={index} />
+                <Note
+                  key={note.id}
+                  color={note.color}
+                  noteId={note.id}
+                  index={index}
+                  onRemove={handleRemoveNote}
+                />
               ))}
               {provided.placeholder}
             </div>

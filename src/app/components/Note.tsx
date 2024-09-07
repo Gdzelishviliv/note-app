@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
+import React, { useState, useEffect } from "react";
+import { Draggable } from "@hello-pangea/dnd";
 
 interface Task {
   id: string;
@@ -12,11 +12,12 @@ const generateId = () => {
   return `_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`;
 };
 
-const Note: React.FC<{ color: string; noteId: string; index: number }> = ({
-  color,
-  noteId,
-  index,
-}) => {
+const Note: React.FC<{
+  color: string;
+  noteId: string;
+  index: number;
+  onRemove: (id: string) => void;
+}> = ({ color, noteId, index, onRemove }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputText, setInputText] = useState("");
 
@@ -39,6 +40,8 @@ const Note: React.FC<{ color: string; noteId: string; index: number }> = ({
       } catch (error) {
         console.error("Error saving tasks to localStorage:", error);
       }
+    } else {
+      localStorage.removeItem(noteId);
     }
   }, [tasks, noteId]);
 
@@ -78,6 +81,10 @@ const Note: React.FC<{ color: string; noteId: string; index: number }> = ({
     link.click();
   };
 
+  const removeNote = () => {
+    onRemove(noteId);
+  };
+
   return (
     <Draggable draggableId={noteId} index={index}>
       {(provided) => (
@@ -87,15 +94,37 @@ const Note: React.FC<{ color: string; noteId: string; index: number }> = ({
           {...provided.dragHandleProps}
           className={`relative flex flex-col-reverse p-4 m-4 border rounded-lg shadow-lg ${color}`}
         >
-          <div className="absolute top-0 right-0 p-2">
-            <button
-              onClick={downloadNote}
-              className="text-white bg-blue-500 p-1 rounded-full"
-            >
-              📥
-            </button>
-          </div>
-          <div className="space-y-2">
+          <div className="space-y-2 mb-12">
+            <div className="flex space-x-2 p-2 justify-end">
+              <button
+                onClick={removeNote}
+                className="text-red-500 bg-white p-2 rounded-full"
+              >
+                ❌
+              </button>
+              <button
+                onClick={downloadNote}
+                className="text-white bg-blue-500 p-2 rounded-full"
+              >
+                📥
+              </button>
+            </div>
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                value={inputText}
+                onKeyDown={handleKeyDown}
+                placeholder="Type task"
+                onChange={(e) => setInputText(e.target.value)}
+                className="mt-2 w-full p-2 border rounded h-10"
+              />
+              <button
+                onClick={addTask}
+                className="mt-2 bg-green-500 text-white p-2 rounded h-10 w-24"
+              >
+                Add
+              </button>
+            </div>
             {tasks.map((task) => (
               <div
                 key={task.id}
@@ -118,22 +147,6 @@ const Note: React.FC<{ color: string; noteId: string; index: number }> = ({
                 </button>
               </div>
             ))}
-          </div>
-          <div className="flex gap-2 mb-4">
-            <input
-              type="text"
-              value={inputText}
-              onKeyDown={handleKeyDown}
-              placeholder="Type note"
-              onChange={(e) => setInputText(e.target.value)}
-              className="mt-2 w-full p-2 border rounded h-10"
-            />
-            <button
-              onClick={addTask}
-              className="mt-2 bg-green-500 text-white p-2 rounded h-10 w-24"
-            >
-              Add
-            </button>
           </div>
         </div>
       )}
