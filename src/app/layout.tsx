@@ -1,6 +1,6 @@
 import './globals.css';
 import { ReactNode } from 'react';
-import { MainLayout } from './layouts/MainLayout';
+import { MainLayout } from './common/components/_organisms/layouts/MainLayout';
 
 export const metadata = {
   title: 'Notes',

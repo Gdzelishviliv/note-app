@@ -1,8 +1,7 @@
+import { MainLayoutProps } from "@/app/common/types";
 import React, { ReactNode } from "react";
 
-interface MainLayoutProps {
-  children: ReactNode;
-}
+
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
@@ -21,3 +20,5 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     </html>
   );
 };
+
+export default MainLayout;

@@ -2,8 +2,9 @@
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { NoteProps } from "./common/types";
 
-const Note = dynamic(() => import("./components/Note"), { ssr: false });
+const Note = dynamic(() => import("./common/components/Note"), { ssr: false });
 
 const colors = [
   "bg-yellow-200",
@@ -13,13 +14,8 @@ const colors = [
   "bg-purple-200",
 ];
 
-interface Note {
-  id: string;
-  color: string;
-}
-
 const Home: React.FC = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteProps[]>([]);
   const [showColorSelector, setShowColorSelector] = useState(false);
 
   useEffect(() => {
@@ -41,7 +37,7 @@ const Home: React.FC = () => {
 
   const handleRemoveNote = (id: string) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
-    localStorage.removeItem(id); // Clean up localStorage if needed
+    localStorage.removeItem(id);
   };
 
   const onDragEnd = (result: any) => {

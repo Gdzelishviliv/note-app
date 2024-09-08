@@ -1,12 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Draggable } from "@hello-pangea/dnd";
+import { Task } from "../types";
 
-interface Task {
-  id: string;
-  text: string;
-  completed: boolean;
-}
 
 const generateId = () => {
   return `_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`;

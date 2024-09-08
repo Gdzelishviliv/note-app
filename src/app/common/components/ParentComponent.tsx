@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import Note from "./Note";
-
-interface Note {
-  id: string;
-  color: string;
-}
+import { NoteProps } from "../types";
 
 const ParentComponent = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<NoteProps[]>([]);
 
   const handleRemoveNote = (noteId: string) => {
     setNotes((prevNotes) => prevNotes.filter((note) => note.id !== noteId));
