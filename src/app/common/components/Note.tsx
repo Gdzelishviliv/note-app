@@ -2,40 +2,31 @@
 import React, { useState, useEffect } from "react";
 import { Draggable } from "@hello-pangea/dnd";
 import { Task } from "../types";
+import {
+  generateId,
+  downloadNoteContent,
+  loadTasksFromLocalStorage,
+  saveTasksToLocalStorage,
+} from "../utils/UtilityFunctions";
 
-
-const generateId = () => {
-  return `_${Math.random().toString(36).substr(2, 9)}_${Date.now()}`;
-};
-
-const Note: React.FC<{
+interface NoteProps {
   color: string;
   noteId: string;
   index: number;
   onRemove: (id: string) => void;
-}> = ({ color, noteId, index, onRemove }) => {
+}
+
+const Note: React.FC<NoteProps> = ({ color, noteId, index, onRemove }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputText, setInputText] = useState("");
 
   useEffect(() => {
-    const storedTasks = localStorage.getItem(noteId);
-    if (storedTasks) {
-      try {
-        const parsedTasks: Task[] = JSON.parse(storedTasks);
-        setTasks(parsedTasks);
-      } catch (error) {
-        console.error("Error parsing tasks from localStorage:", error);
-      }
-    }
+    setTasks(loadTasksFromLocalStorage(noteId));
   }, [noteId]);
 
   useEffect(() => {
     if (tasks.length > 0) {
-      try {
-        localStorage.setItem(noteId, JSON.stringify(tasks));
-      } catch (error) {
-        console.error("Error saving tasks to localStorage:", error);
-      }
+      saveTasksToLocalStorage(noteId, tasks);
     } else {
       localStorage.removeItem(noteId);
     }
@@ -68,13 +59,7 @@ const Note: React.FC<{
   };
 
   const downloadNote = () => {
-    const blob = new Blob([JSON.stringify(tasks)], {
-      type: "text/plain;charset=utf-8",
-    });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `note_${noteId}.txt`;
-    link.click();
+    downloadNoteContent(noteId, tasks);
   };
 
   const removeNote = () => {
