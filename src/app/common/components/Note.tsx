@@ -44,7 +44,7 @@ const Note: React.FC<NoteProps> = ({ color, noteId, index, onRemove }) => {
       const newTask = { id: generateId(), text: inputText, completed: false };
       setTasks((prevTasks) => [...prevTasks, newTask]);
       setInputText("");
-      toast.success("Success Notification !", {
+      toast.success("Note succesfully added!!!", {
         position: "bottom-left",
       });
     }
