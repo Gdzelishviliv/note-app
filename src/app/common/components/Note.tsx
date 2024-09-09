@@ -37,7 +37,7 @@ const Note: React.FC<NoteProps> = ({ color, noteId, index, onRemove }) => {
   const addTask = () => {
     if (inputText === "") {
       toast.error("Type something!!!", {
-        position: 'bottom-left',
+        position: "bottom-left",
         autoClose: 3000,
       });
     } else if (inputText.trim()) {
